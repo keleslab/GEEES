@@ -11,7 +11,8 @@ The codes implementing GEEES are provided in `R/Functions/GEEES.R` which could b
 # object: a seurat object with normalized RNA and ATAC assay
 # gene.use: a list of gene name for detecting regulatory enhancers
 # nclust: the number of clusters used for parallel computing
-GEEES_result <- SNframe(object,"Bench_log.txt","benchSN_K562_30.Rdata",genes.use = gene.use,nclust = nclust)
+GEEES_result_cell <- SNframe(object,"Bench_log.txt","benchSN_K562_30.Rdata",genes.use = gene.use,nclust = nclust)
+GEEES_result <- generate_pair(GEEES_result_cell)
 ```
 
 ## Benchmark Study
