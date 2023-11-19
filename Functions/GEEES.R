@@ -246,3 +246,33 @@ SNframe <- function(data,logname=NULL,netname=NULL,genes.use,whole = F,nclust=10
   # 
   # save(SpecificNetPromoter,file = promname)
 }
+generate_pair <- function(data){
+  # generate rank in different criteria
+  cd4_gene_cis <- pblapply(1:length(data),FUN = function(j){
+    i <- data[[j]]
+    if(is.null(i)) return(NULL)
+    # if(is.null(dim(i))){
+    #   stat <- mean(i)
+    #   peak <- names(i)
+    #   print(j)
+    #   gene <- names(cd4SpecificNetwork)[j]
+    #   return(data.frame(gene,peak,stat))
+    # }
+    i[is.na(i)] <- 1
+    
+    #adj <- sapply(1:nrow(i),FUN = function(k) return(p.adjust(i[k,],method = "BH")))
+    #adj <- t(adj)
+    #stat.BH <- colMeans(adj<0.05)
+    fishers <- sapply(1:ncol(i),FUN = function(k) return(fisher(i[,k])$p))
+    stat.fisher <- p.adjust(fishers,method = "BH")
+    stat.median <- colMedians(-log10(i))
+    stat.mean <- colMeans(-i)
+    stat <- colMeans(i<0.05)
+    peak <- colnames(i)
+    gene <- rep(names(data)[j],length(peak))
+    return(data.frame(gene,peak,stat,stat.fisher,stat.median,stat.mean))
+    
+  })
+  cd4_gene_cis <- do.call("rbind",cd4_gene_cis)
+  return(cd4_gene_cis)
+}
