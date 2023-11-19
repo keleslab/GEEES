@@ -5,7 +5,7 @@ cell level by considering a cell neighbourhood defined by both the expression of
 
 ![alt text](https://github.com/Shuyang12138/GEEES/blob/main/Figures/GEEESFramework.jpg?raw=true)
 
-The codes implementing GEEES are provided in `R/Functions/GEEES.R` which could be used as below.
+The codes implementing GEEES are provided in `Codes/GEEES.R` which could be used as below.
 ```r
 # Input:
 # object: a seurat object with normalized RNA and ATAC assay
@@ -20,4 +20,4 @@ GEEES is benchmarked against the state-of-the-art methods and a number of multiv
 
 ![alt text](https://github.com/Shuyang12138/GEEES/blob/main/Figures/Benchmark.jpg?raw=true)
 
-The codes implementing the multivariate regression approaches are provided in `R/Functions/Regression.R`
+The codes implementing the multivariate regression approaches are provided in `Codes/Regression.R`
