@@ -32,7 +32,6 @@ library(EnsDb.Hsapiens.v86)
 library(GEEES)
 # data preparation
 K562_mini_obj <- CreateSeuratObject(counts = K562_mini$SCT)
-K562_mini_obj[["percent.mt"]] <- PercentageFeatureSet(K562_mini_obj, pattern = "^MT-")
 annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Hsapiens.v86)
 seqlevelsStyle(annotations) <- 'UCSC'
 genome(annotations) <- "hg38"
