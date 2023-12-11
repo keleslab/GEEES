@@ -15,6 +15,7 @@ If the installation fails, make sure you can install the following R packages:
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("EnsDb.Hsapiens.v86")
+BiocManager::install("biovizBase")
 BiocManager::install("Seurat")
 BiocManager::install("SeuratObject")
 BiocManager::install("IRanges")
