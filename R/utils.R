@@ -35,7 +35,7 @@ find_peak <- function(peaks, genes, sep = c("-", "-")) {
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
 #' @importFrom data.table as.data.table
 #'
-#' @keywords internal
+#' @export
 #'
 CollapseToLongestTranscript <- function(ranges) {
   seqnames=start=end=strand=gene_biotype=gene_name=NULL
@@ -140,4 +140,21 @@ LinksToGRanges <- function(linkmat, gene.coords, sep = c("-", "-")) {
   # convert to granges
   gr.use <- makeGRangesFromDataFrame(df = df, keep.extra.columns = TRUE)
   return(sort(x = gr.use))
+}
+
+#' Distance adjusted statistics
+#' 
+#' @param result result statistics without distance adjustment
+#' @param gene.coords data frame for gene coordinates
+#' 
+#' @return data frame with one additional column named distance_adjusted for distance adjusted statistics
+#' 
+#' @importFrom Signac StringToGRanges
+#' @export
+Distance_adjust <- function(result,gene.coords){
+  result$TSS <- gene.coords[result$gene,"start"]
+  result$peak_start <- data.frame(StringToGRanges(result$peak))$start
+  result$dist <- -abs(result$TSS-result$peak_start)
+  result$distance_adjusted <- (result$max_rate+0.05)*exp(result$dist/200000)
+  return(result)
 }
