@@ -9,4 +9,3 @@ CollapseToLongestTranscript(ranges)
 \description{
 CollapseToLongestTranscript
 }
-\keyword{internal}
