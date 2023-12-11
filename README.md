@@ -5,7 +5,26 @@ cell level by considering a cell neighbourhood defined by both the expression of
 
 ![alt text](https://github.com/Shuyang12138/GEEES/blob/main/Figures/GEEESFramework.jpg?raw=true)
 
-The codes implementing GEEES are provided in `Codes/GEEES.R` which could be used as below.
+### Package installation
+```r
+## install.packages("devtools")
+devtools::install_github("Shuyang12138/GEEES")
+```
+If the installation fails, make sure you can install the following R packages:
+```r
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("EnsDb.Hsapiens.v86")
+BiocManager::install("Seurat")
+BiocManager::install("SeuratObject")
+BiocManager::install("IRanges")
+BiocManager::install("Signac")
+BiocManager::install("GenomicRanges")
+BiocManager::install("GenomeInfoDb")
+install.packages("pbapply")
+devtools::install_github("cran/remMap")
+```
+### Run demo codes
 ```r
 library(Signac)
 library(EnsDb.Hsapiens.v86)
@@ -47,4 +66,3 @@ GEEES is benchmarked against the state-of-the-art methods and a number of multiv
 
 ![alt text](https://github.com/Shuyang12138/GEEES/blob/main/Figures/Benchmark.jpg?raw=true)
 
-The codes implementing the multivariate regression approaches are provided in `Codes/Regression.R`
