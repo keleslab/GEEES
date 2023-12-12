@@ -5,14 +5,61 @@ cell level by considering a cell neighbourhood defined by both the expression of
 
 ![alt text](https://github.com/Shuyang12138/GEEES/blob/main/Figures/GEEESFramework.jpg?raw=true)
 
-The codes implementing GEEES are provided in `Codes/GEEES.R` which could be used as below.
+### Package installation
 ```r
-# Input:
-# object: a seurat object with normalized RNA and ATAC assay
-# gene.use: a list of gene name for detecting regulatory enhancers
-# nclust: the number of clusters used for parallel computing
-GEEES_result_cell <- SNframe(object,"Bench_log.txt","benchSN_K562_30.Rdata",genes.use = gene.use,nclust = nclust) # Get cell-specific GEEES score for gene-enhancer pairs
-GEEES_result <- generate_pair(GEEES_result_cell) # Get aggregated GEEES scores for gene-enhancer pairs
+## install.packages("devtools")
+devtools::install_github("Shuyang12138/GEEES")
+```
+If the installation fails, make sure you can install the following R packages:
+```r
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("EnsDb.Hsapiens.v86")
+BiocManager::install("biovizBase")
+BiocManager::install("Seurat")
+BiocManager::install("SeuratObject")
+BiocManager::install("IRanges")
+BiocManager::install("Signac")
+BiocManager::install("GenomicRanges")
+BiocManager::install("GenomeInfoDb")
+BiocManager::install("MatrixGenerics")
+install.packages("pbapply")
+devtools::install_github("cran/remMap")
+```
+### Run demo codes
+```r
+library(Signac)
+library(EnsDb.Hsapiens.v86)
+library(GEEES)
+# data preparation
+K562_mini_obj <- CreateSeuratObject(counts = K562_mini$SCT)
+annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Hsapiens.v86)
+seqlevelsStyle(annotations) <- 'UCSC'
+genome(annotations) <- "hg38"
+chrom_assay <- CreateChromatinAssay(
+  counts = K562_mini$ATAC,
+  genome = 'hg38',
+  annotation = annotations
+)
+K562_mini_obj[["ATAC"]] <- chrom_assay
+
+# Results without distance adjustment
+GEEES_mini <- NetworkInCell(K562_mini_obj,peak.assay = "ATAC",expression.assay="RNA",peak.slot = "counts",expression.slot = "counts",genes.use = NULL,cl = NULL,num=30)
+GEEES_mini_aggregated <- generate_pair(GEEES_mini)
+
+set.seed(2023)
+adaptive_mini <- adaptive.regress.stabs(coaccess.adapt.data.K562,K562_mini_obj,peak.assay = "ATAC",expression.assay="RNA",peak.slot = "counts",expression.slot = "counts",PFER = 0.8,q = 3)
+sequential_mini <- sequential.regression.stabs(coaccess.adapt.data.K562,K562_mini_obj,peak.assay = "ATAC",expression.assay="RNA",peak.slot = "counts",expression.slot = "counts",PFER = 0.8,q = 3)
+multiResponse_mini <- remMap.regression.stabs(coaccess.adapt.data.K562,K562_mini_obj,peak.assay = "ATAC",expression.assay="RNA",peak.slot = "counts",expression.slot = "counts",PFER = 0.8,q = 2)
+
+# Results with distance adjustment
+gene.coords <- CollapseToLongestTranscript(annotations)
+gene.coords <- data.frame(gene.coords)
+rownames(gene.coords) <- gene.coords$gene_name
+GEEES_mini_aggregated <- Distance_adjust(GEEES_mini_aggregated,gene.coords)
+adaptive_mini <- Distance_adjust(adaptive_mini,gene.coords)
+sequential_mini <- Distance_adjust(sequential_mini,gene.coords)
+multiResponse_mini <- Distance_adjust(multiResponse_mini,gene.coords)
 ```
 
 ## Benchmark Study
@@ -20,4 +67,3 @@ GEEES is benchmarked against the state-of-the-art methods and a number of multiv
 
 ![alt text](https://github.com/Shuyang12138/GEEES/blob/main/Figures/Benchmark.jpg?raw=true)
 
-The codes implementing the multivariate regression approaches are provided in `Codes/Regression.R`
