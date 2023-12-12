@@ -293,7 +293,7 @@ GEEESframe <- function(data,logname=NULL,netname=NULL,genes.use,nclust=10,print=
 }
 
 #' Aggregating cell-specific GEEES statistic over the population for a summarized statistic
-#' @param data a seurat object
+#' @param data The data frame of cell-specific gene-enhancer GEEES statistics returned by NetworkInCell
 #'
 #' @return a data frame with aggregated GEEES statistics for all gene-enhancer pairs
 #'
