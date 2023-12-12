@@ -322,7 +322,7 @@ generate_pair <- function(data){
     #stat.BH <- colMeans(adj<0.05)
     # fishers <- sapply(1:ncol(i),FUN = function(k) return(fisher(i[,k])$p))
     # stat.fisher <- p.adjust(fishers,method = "BH")
-    stat.median <- colMedians(-log10(i))
+    stat.median <- colMedians(-log10(i),useNames = T)
     # stat.mean <- colMeans(-i)
     # stat <- colMeans(i<0.05)
     peak <- colnames(i)
