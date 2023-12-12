@@ -22,6 +22,7 @@ BiocManager::install("IRanges")
 BiocManager::install("Signac")
 BiocManager::install("GenomicRanges")
 BiocManager::install("GenomeInfoDb")
+BiocManager::install("MatrixGenerics")
 install.packages("pbapply")
 devtools::install_github("cran/remMap")
 ```
